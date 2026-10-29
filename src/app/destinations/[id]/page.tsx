@@ -1,10 +1,18 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, CalendarDays, Check, MapPin, Pencil, Star, Trash2 } from "lucide-react";
+import {
+  ArrowLeft,
+  CalendarDays,
+  Check,
+  MapPin,
+  Star,
+  Trash2,
+} from "lucide-react";
 
 import { BookingCard } from "@/components/destinations/booking-card";
 import { Button } from "@/components/ui/button";
 import { getDestination } from "@/lib/destinations";
+import EditDestinationDialog from "@/components/EditDestinationDialog";
 
 export default async function DestinationDetailsPage({
   params,
@@ -24,10 +32,7 @@ export default async function DestinationDetailsPage({
         </Link>
 
         <div className="flex items-center gap-3">
-          <Button variant="outline" className="h-9 gap-2 px-4">
-            <Pencil className="size-4" strokeWidth={1.75} />
-            Edit
-          </Button>
+          <EditDestinationDialog destination={destination} />
           <Button
             variant="outline"
             className="h-9 gap-2 border-destructive/40 px-4 text-destructive hover:bg-destructive/10 hover:text-destructive"
@@ -73,7 +78,10 @@ export default async function DestinationDetailsPage({
               </span>
             )}
             <span className="flex items-center gap-1.5">
-              <CalendarDays className="size-4 text-neutral-500" strokeWidth={1.75} />
+              <CalendarDays
+                className="size-4 text-neutral-500"
+                strokeWidth={1.75}
+              />
               {destination.duration}
             </span>
           </div>
