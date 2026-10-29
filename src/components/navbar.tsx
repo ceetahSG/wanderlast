@@ -1,17 +1,23 @@
-import Image from "next/image"
-import Link from "next/link"
-import { UserRound } from "lucide-react"
+"use client";
 
-import logo from "@/assets/Wanderlast.png"
+import Image from "next/image";
+import Link from "next/link";
+import { UserRound } from "lucide-react";
+import { useState } from "react";
+
+import logo from "@/assets/Wanderlast.png";
 
 const navLinks = [
   { label: "Home", href: "/" },
   { label: "Destinations", href: "/destinations" },
   { label: "My Bookings", href: "/bookings" },
+  { label: "Add Destination", href: "/add-destination" },
   { label: "Admin", href: "/admin" },
-]
+];
 
 export function Navbar() {
+  const [activeTab, setActiveTab] = useState("/");
+
   return (
     <header className="sticky top-0 z-50 bg-white">
       <nav className="relative mx-auto flex h-16 w-full max-w-[1600px] items-center justify-between gap-4 px-6 lg:h-18 lg:px-10">
@@ -20,11 +26,11 @@ export function Navbar() {
             <li key={link.href}>
               <Link
                 href={link.href}
-                className={
-                  link.href === "/"
-                    ? "text-brand"
-                    : "transition-colors hover:text-brand"
-                }
+                aria-current={activeTab === link.href ? "page" : undefined}
+                onClick={() => setActiveTab(link.href)}
+                className={`transition-colors hover:text-brand ${
+                  activeTab === link.href ? "text-brand" : ""
+                }`}
               >
                 {link.label}
               </Link>
@@ -57,5 +63,5 @@ export function Navbar() {
         </div>
       </nav>
     </header>
-  )
+  );
 }

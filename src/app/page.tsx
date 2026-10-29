@@ -8,12 +8,12 @@ import { Testimonials } from "@/components/testimonials"
 export default function Home() {
   return (
     <>
-      <Navbar />
+     
       <Banner />
       <Features />
       <Testimonials />
       <Cta />
-      <Footer />
+      
     </>
   )
 }
