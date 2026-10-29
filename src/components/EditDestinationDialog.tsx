@@ -32,6 +32,7 @@ interface Destination {
   departureDate: string;
   imageUrl: string;
   description: string;
+  id: string;
 }
 
 const edit = ({ destination }: { destination: Destination }) => {
@@ -40,6 +41,24 @@ const edit = ({ destination }: { destination: Destination }) => {
     const formData = new FormData(event.currentTarget);
     const data = Object.fromEntries(formData.entries());
     console.log("Form submitted successfully:", data);
+    console.log("Destination ID:", destination.id);
+
+    const res = await fetch(
+      `http://localhost:5000/destination/${destination.id}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      },
+    );
+    if (!res.ok) {
+      throw new Error("Failed to submit form");
+    } else {
+      console.log("Form submitted successfully:", data);
+      window.location.reload(); // Reload the page to reflect the updated data
+    }
     // Here you can handle the form submission, e.g., send data to an API
   };
   return (
@@ -60,9 +79,8 @@ const edit = ({ destination }: { destination: Destination }) => {
               <Label htmlFor="name">Destination Name</Label>
               <Input
                 id="name"
-                name="name"
-                placeholder={destination.destinationName as string}
-                required
+                name="destinationName"
+                defaultValue={destination.destinationName}
                 className="h-10"
               />
             </div>
@@ -73,8 +91,7 @@ const edit = ({ destination }: { destination: Destination }) => {
                 <Input
                   id="country"
                   name="country"
-                  placeholder={destination.country as string}
-                  required
+                  defaultValue={destination.country}
                   className="h-10"
                 />
               </div>
@@ -82,7 +99,7 @@ const edit = ({ destination }: { destination: Destination }) => {
                 <Label htmlFor="category">Category</Label>
                 <NativeSelect
                   name="category"
-                  defaultValue="Beach"
+                  defaultValue={destination.category}
                   className="w-full [&_select]:h-10"
                 >
                   {categories.map((category) => (
@@ -102,8 +119,7 @@ const edit = ({ destination }: { destination: Destination }) => {
                   name="price"
                   type="number"
                   min="0"
-                  placeholder={String(destination.price)}
-                  required
+                  defaultValue={destination.price}
                   className="h-10"
                 />
               </div>
@@ -112,8 +128,7 @@ const edit = ({ destination }: { destination: Destination }) => {
                 <Input
                   id="duration"
                   name="duration"
-                  placeholder={destination.duration as string}
-                  required
+                  defaultValue={destination.duration}
                   className="h-10"
                 />
               </div>
@@ -125,7 +140,7 @@ const edit = ({ destination }: { destination: Destination }) => {
                 id="departure-date"
                 name="departureDate"
                 type="date"
-                required
+                defaultValue={destination.departureDate}
                 className="h-10"
               />
             </div>
@@ -136,8 +151,7 @@ const edit = ({ destination }: { destination: Destination }) => {
                 id="image-url"
                 name="imageUrl"
                 type="url"
-                placeholder={destination.imageUrl as string}
-                required
+                defaultValue={destination.imageUrl}
                 className="h-10"
               />
             </div>
@@ -147,8 +161,7 @@ const edit = ({ destination }: { destination: Destination }) => {
               <Textarea
                 id="description"
                 name="description"
-                placeholder={destination.description as string}
-                required
+                defaultValue={destination.description}
                 className="min-h-24"
               />
             </div>
@@ -168,7 +181,7 @@ const edit = ({ destination }: { destination: Destination }) => {
               className="bg-brand text-brand-foreground hover:bg-brand/90"
             >
               <Save />
-              Add Travel Package
+              Update Travel Package
             </Button>
           </div>
         </form>

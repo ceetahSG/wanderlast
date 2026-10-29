@@ -13,6 +13,8 @@ import { BookingCard } from "@/components/destinations/booking-card";
 import { Button } from "@/components/ui/button";
 import { getDestination } from "@/lib/destinations";
 import EditDestinationDialog from "@/components/EditDestinationDialog";
+import { redirect } from "next/navigation";
+import Delete from "@/components/Delete";
 
 export default async function DestinationDetailsPage({
   params,
@@ -32,14 +34,8 @@ export default async function DestinationDetailsPage({
         </Link>
 
         <div className="flex items-center gap-3">
-          <EditDestinationDialog destination={destination} />
-          <Button
-            variant="outline"
-            className="h-9 gap-2 border-destructive/40 px-4 text-destructive hover:bg-destructive/10 hover:text-destructive"
-          >
-            <Trash2 className="size-4" strokeWidth={1.75} />
-            Cancel
-          </Button>
+          <EditDestinationDialog destination={{ ...destination, id }} />
+          <Delete id={id} />
         </div>
       </div>
 
