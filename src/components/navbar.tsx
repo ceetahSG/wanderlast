@@ -6,6 +6,8 @@ import { UserRound } from "lucide-react";
 import { useState } from "react";
 
 import logo from "@/assets/Wanderlast.png";
+import { useSession } from "@/lib/auth-client";
+import Profile from "./Profile";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -17,6 +19,7 @@ const navLinks = [
 
 export function Navbar() {
   const [activeTab, setActiveTab] = useState("/");
+  const { data: session } = useSession();
 
   return (
     <header className="sticky top-0 z-50 bg-white">
@@ -47,19 +50,13 @@ export function Navbar() {
         </Link>
 
         <div className="ml-auto hidden items-center gap-6 text-sm font-medium whitespace-nowrap text-neutral-700 sm:flex">
-          <Link
-            href="/profile"
-            className="flex items-center gap-1.5 transition-colors hover:text-brand"
-          >
-            <UserRound className="size-4" strokeWidth={1.75} />
-            Profile
-          </Link>
-          <Link href="/login" className="transition-colors hover:text-brand">
-            Login
-          </Link>
-          <Link href="/signup" className="transition-colors hover:text-brand">
-            Sign Up
-          </Link>
+          {session ? (
+            <Profile user={session.user} />
+          ) : (
+            <Link href="/login" className="transition-colors hover:text-brand">
+              Login
+            </Link>
+          )}
         </div>
       </nav>
     </header>
