@@ -2,6 +2,7 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Popover,
@@ -13,19 +14,30 @@ import {
 } from "@/components/ui/popover";
 import { authClient } from "@/lib/auth-client";
 
-const ProfilePopOver = ({ user }: { user: any }) => {
+type ProfileUser = {
+  name: string;
+  email: string;
+};
+
+const ProfilePopOver = ({ user }: { user: ProfileUser }) => {
   const router = useRouter();
+  const [error, setError] = useState<string | null>(null);
+  const [pending, setPending] = useState(false);
 
   async function handleSignOut() {
+    setError(null);
+    setPending(true);
     const { error } = await authClient.signOut();
 
     if (error) {
       console.error("Failed to sign out:", error);
+      setError("Unable to sign out. Please try again.");
+      setPending(false);
       return;
     }
 
-    router.push("/login");
     router.refresh();
+    router.replace("/login");
   }
 
   return (
@@ -46,10 +58,12 @@ const ProfilePopOver = ({ user }: { user: any }) => {
           <Button
             className="to-destructive"
             variant="ghost"
+            disabled={pending}
             onClick={handleSignOut}
           >
-            Sign Out
+            {pending ? "Signing Out..." : "Sign Out"}
           </Button>
+          {error && <p className="text-sm text-destructive">{error}</p>}
         </PopoverContent>
       </Popover>
     </div>
